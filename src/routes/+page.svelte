@@ -84,13 +84,15 @@
 </script>
 
 <div class="container">
-	<input
-		type="text"
-		class="text"
-		bind:value={query}
-		on:keydown={(event) => event.keyCode === 13 && search()}
-		placeholder="Search for anime..."
-	/>
+	<section>
+		<input
+			type="text"
+			class="text"
+			bind:value={query}
+			on:keydown={(event) => event.keyCode === 13 && search()}
+			placeholder="Search for anime..."
+		/>
+	</section>
 	<div class="selected-container">
 		{#each selectedImages as item}
 			<div class="selected-card">
@@ -133,6 +135,17 @@
 		overflow: hidden;
 		background-color: rgb(40, 42, 54);
 	}
+
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100vw;
+		height: 100vh; /* Ensure it covers the full viewport height */
+		overflow: hidden; /* Prevent unnecessary scrolls */
+		position: fixed;
+	}
+
 	.preview-overlay {
 		position: fixed;
 		top: 0;
@@ -159,7 +172,7 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: repeat(3, 1fr);
-		gap: 10px; /* Adjusted to ensure proper spacing between images */
+		gap: 10px;
 		margin-bottom: 20px;
 		width: 900px;
 		height: 900px;
@@ -174,29 +187,69 @@
 
 	.preview-btn,
 	.download-btn {
-		background-color: #4caf50;
-		border: none;
-		color: white;
-		padding: 15px 32px;
+		appearance: none;
+		background-color: #ffffff;
+		border-width: 0;
+		box-sizing: border-box;
+		color: #000000;
+		cursor: pointer;
+		display: inline-block;
+		font-family: Clarkson, Helvetica, sans-serif;
+		font-size: 14px;
+		font-weight: 500;
+		letter-spacing: 0;
+		line-height: 1em;
+		margin: 0;
+		opacity: 1;
+		outline: 0;
+		padding: 1.5em 2.2em;
+		position: relative;
 		text-align: center;
 		text-decoration: none;
-		display: inline-block;
-		font-size: 16px;
-		margin: 20px auto;
-		cursor: pointer;
-		border-radius: 5px;
+		text-rendering: geometricprecision;
+		text-transform: uppercase;
+		transition:
+			opacity 300ms cubic-bezier(0.694, 0, 0.335, 1),
+			background-color 100ms cubic-bezier(0.694, 0, 0.335, 1),
+			color 100ms cubic-bezier(0.694, 0, 0.335, 1);
+		user-select: none;
+		-webkit-user-select: none;
+		touch-action: manipulation;
+		vertical-align: baseline;
+		white-space: nowrap;
 	}
-	.container {
-		height: 100vh;
-		display: flex;
-		flex-direction: column;
-		position: fixed;
-		align-items: center;
-		z-index: 1000;
-		width: 100%;
+
+	.download-btn:before {
+		animation: opacityFallbackOut 0.5s step-end forwards;
+		backface-visibility: hidden;
+		background-color: #ebebeb;
+		clip-path: polygon(-1% 0, 0 0, -25% 100%, -1% 100%);
+		content: '';
 		height: 100%;
-		overflow: auto;
+		left: 0;
+		position: absolute;
+		top: 0;
+		transform: translateZ(0);
+		transition:
+			clip-path 0.5s cubic-bezier(0.165, 0.84, 0.44, 1),
+			-webkit-clip-path 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+		width: 100%;
 	}
+
+	.download-btn:hover:before {
+		animation: opacityFallbackIn 0s step-start forwards;
+		clip-path: polygon(0 0, 101% 0, 101% 101%, 0 101%);
+	}
+
+	.download-btn:after {
+		background-color: #ffffff;
+	}
+
+	.download-btn span {
+		z-index: 1;
+		position: relative;
+	}
+
 	.selected-container {
 		display: flex;
 		flex-wrap: wrap;
@@ -205,31 +258,22 @@
 		padding: 10px;
 		max-height: 40vh;
 		overflow-y: auto;
+		width: 100%;
 	}
+
 	.selected-card {
 		position: relative;
 		width: 100px;
 		height: 150px;
 	}
-	.download-btn {
-		background-color: #4caf50;
-		border: none;
-		color: white;
-		padding: 15px 32px;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 16px;
-		margin: 20px auto;
-		cursor: pointer;
-		border-radius: 5px;
-	}
+
 	.selected-card img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		border-radius: 5px;
 	}
+
 	.remove-btn {
 		position: absolute;
 		top: 5px;
@@ -242,6 +286,7 @@
 		font-size: 12px;
 		cursor: pointer;
 	}
+
 	.text {
 		background-color: #000000;
 		color: white;
@@ -253,13 +298,17 @@
 		text-align: center;
 		font-size: 1.2em;
 	}
+
 	.scroll-container {
 		flex-grow: 1;
 		display: flex;
 		overflow-x: auto;
 		padding-left: 20px;
 		align-items: center;
+		width: 100%;
+		height: 30%;
 	}
+
 	.card {
 		flex: 0 0 auto;
 		margin-right: 20px;
@@ -267,44 +316,57 @@
 		max-width: 300px;
 		cursor: pointer;
 	}
+
 	.card__image {
 		display: block;
 		height: 300px;
 		max-height: 500px;
 		overflow: hidden;
 	}
+
 	.card__image img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		border-radius: 10px;
 	}
-	/* Hide the scrollbar */
+
 	.scroll-container::-webkit-scrollbar {
 		display: none;
 	}
+
 	.scroll-container {
 		-ms-overflow-style: none;
 		scrollbar-width: none;
 	}
 
 	/* Media Query for Mobile Devices */
-	@media (max-width: 600px) {
+	@media (max-width: 450px) {
+		.container {
+			width: 100%;
+			padding: 0;
+			overflow-x: hidden;
+		}
+
 		.preview-content {
 			padding: 10px;
-			max-width: 90vw;
-			max-height: 100vh;
+			max-width: 150vw;
+			max-height: 150vh;
+			overflow: hidden;
 		}
 
 		.preview-grid {
-			width: 300px;
-			height: 300px;
+			width: 150vw;
+			height: 150vw;
+			max-width: 300px;
+			max-height: 300px;
 		}
 
 		.selected-container {
 			max-height: auto;
-			width: 80%;
+			width: 100%;
 			padding: 5px;
+			overflow-x: hidden;
 		}
 
 		.selected-card {
@@ -319,10 +381,7 @@
 
 		.preview-btn,
 		.download-btn {
-			font-size: 14px;
-			align-self: center;
-			justify-self: unset;
-			justify-content: center;
+			font-size: 8px;
 		}
 
 		.card__image {
@@ -332,23 +391,24 @@
 		.card {
 			max-width: 200px;
 		}
+	}
 
-		@media (max-width: 1080px) {
-			.preview-content {
-				padding: 10px;
-				max-width: 100vw;
-				max-height: 90vh;
-			}
+	@media (max-width: 1080px) {
+		.preview-content {
+			padding: 10px;
+			max-width: 100vw;
+			max-height: 90vh;
+		}
 
-			.preview-grid {
-				width: 600px;
-				height: 600px;
-			}
+		.preview-grid {
+			width: 600px;
+			height: 600px;
+		}
 
-			.preview-btn,
-			.download-btn {
-				font-size: 16px;
-			}
+		.preview-btn,
+		.download-btn {
+			font-size: 10px;
+			margin-bottom: 10px;
 		}
 	}
 </style>
