@@ -22,12 +22,15 @@
 		"prettier": "^3.3.2",
 		"prettier-plugin-svelte": "^3.2.5",
 		"svelte": "^4.2.7",
+		"svelte-motion": "^0.12.2",
 		"tailwindcss": "^3.4.9",
 		"vite": "^5.0.3"
 	},
 	"type": "module",
 	"dependencies": {
 		"drizzle-orm": "^0.31.2",
+		"framer-motion": "^11.3.24",
+		"html2canvas": "^1.4.1",
 		"mysql2": "^3.9.8"
 	}
 }
