@@ -212,7 +212,7 @@
 		padding: 20px;
 		border-radius: 10px;
 		max-width: 90%;
-		max-height: 90%;
+		max-height: auto;
 		overflow: auto;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 	}
@@ -436,7 +436,7 @@
 			width: 150vw;
 			height: 150vw;
 			max-width: 300px;
-			max-height: 300px;
+			max-height: auto;
 		}
 
 		.selected-container {
@@ -474,12 +474,12 @@
 		.preview-content {
 			padding: 10px;
 			max-width: 100vw;
-			max-height: 90vh;
+			max-height: auto;
 		}
 
 		.preview-grid {
 			width: 600px;
-			height: 600px;
+			height: auto;
 		}
 
 		.preview-btn,
