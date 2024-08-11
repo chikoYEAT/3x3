@@ -5,14 +5,15 @@
 	let searchResults = [];
 	let searchQueryUrl = '';
 	let selectedImages = [];
+	let showPreview = false;
 
 	onMount(() => {
-		// Load html2canvas script
 		const script = document.createElement('script');
 		script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
 		script.async = true;
 		document.body.appendChild(script);
 	});
+
 	const search = async () => {
 		const requestUrl = `https://api.jikan.moe/v4/anime?q=${query}&sfw`;
 		searchQueryUrl = 'fetching...';
@@ -24,9 +25,6 @@
 		searchResults = data.data.slice(0, 16); // Limit to 16 results
 	};
 
-	const handleContentClick = (event) => {
-		event.stopPropagation();
-	};
 	const selectImage = (item) => {
 		if (selectedImages.length < 9 && !selectedImages.some((img) => img.mal_id === item.mal_id)) {
 			selectedImages = [...selectedImages, item];
@@ -37,13 +35,36 @@
 		selectedImages = selectedImages.filter((img) => img.mal_id !== item.mal_id);
 	};
 
+	const togglePreview = () => {
+		showPreview = !showPreview;
+	};
+
 	const downloadImage = async () => {
 		if (selectedImages.length !== 9) {
 			alert('Please select exactly 9 images before downloading.');
 			return;
 		}
 
-		const canvas = await html2canvas(selectedContainerRef, {
+		// Ensure the images are fully loaded before capturing
+		const previewGrid = document.querySelector('#preview-grid');
+		if (!previewGrid) {
+			alert('Preview grid not found.');
+			return;
+		}
+
+		const images = previewGrid.querySelectorAll('img');
+		await Promise.all(
+			Array.from(images).map(
+				(img) =>
+					new Promise((resolve) => {
+						if (img.complete) resolve();
+						else img.onload = resolve;
+					})
+			)
+		);
+
+		const canvas = await html2canvas(previewGrid, {
+			useCORS: true, // Ensure images from other origins are handled
 			width: 900,
 			height: 900,
 			scale: 1
@@ -82,6 +103,19 @@
 		{/each}
 	</div>
 	<button class="preview-btn" on:click={togglePreview}>Preview</button>
+
+	{#if showPreview}
+		<div class="preview-overlay" on:click={togglePreview}>
+			<div class="preview-content" on:click|stopPropagation>
+				<div class="preview-grid" id="preview-grid">
+					{#each selectedImages as item}
+						<img src={item.images.jpg.large_image_url} alt={item.title} />
+					{/each}
+				</div>
+				<button class="download-btn" on:click={downloadImage}>Download</button>
+			</div>
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -99,7 +133,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.8);
+		background-color: rgb(40, 42, 54);
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -107,7 +141,7 @@
 	}
 
 	.preview-content {
-		background-color: white;
+		background-color: rgb(0, 0, 0);
 		padding: 20px;
 		border-radius: 10px;
 		max-width: 90%;
@@ -124,7 +158,7 @@
 
 	.preview-grid img {
 		width: 100%;
-		height: auto;
+		height: 100%; /* Adjusted height */
 		object-fit: cover;
 		border-radius: 5px;
 	}
@@ -144,10 +178,15 @@
 		border-radius: 5px;
 	}
 	.container {
-		width: 100vw;
 		height: 100vh;
 		display: flex;
 		flex-direction: column;
+		position: fixed;
+		align-items: center;
+		z-index: 1000;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
 	}
 	.selected-container {
 		display: flex;
@@ -238,5 +277,53 @@
 	.scroll-container {
 		-ms-overflow-style: none;
 		scrollbar-width: none;
+	}
+
+	/* Media Query for Mobile Devices */
+	@media (max-width: 600px) {
+		.preview-content {
+			padding: 10px;
+			max-width: 90vw;
+			max-height: 80vh;
+		}
+
+		.preview-grid img {
+			height: 100%; /* Slightly increased for better visibility on smaller screens */
+		}
+
+		.selected-container {
+			max-height: 30vh;
+			padding: 5px;
+		}
+
+		.selected-card {
+			width: 80px;
+			height: 120px;
+		}
+
+		.text {
+			width: 90%;
+			font-size: 1em;
+		}
+
+		.preview-btn,
+		.download-btn {
+			font-size: 14px;
+		}
+
+		.card__image {
+			height: 200px;
+		}
+
+		.card {
+			max-width: 200px;
+		}
+	}
+	@media (max-width: 1080px) {
+		.preview-content {
+			padding: 10px;
+			max-width: 60vw;
+			max-height: 80vh;
+		}
 	}
 </style>
