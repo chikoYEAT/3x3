@@ -52,6 +52,9 @@
 			return;
 		}
 
+		// Temporarily remove the gap before capturing
+		previewGrid.style.gap = '0px';
+
 		const images = previewGrid.querySelectorAll('img');
 		await Promise.all(
 			Array.from(images).map(
@@ -65,10 +68,13 @@
 
 		const canvas = await html2canvas(previewGrid, {
 			useCORS: true, // Ensure images from other origins are handled
-			width: 900,
-			height: 900,
+			width: previewGrid.offsetWidth,
+			height: previewGrid.offsetHeight,
 			scale: 1
 		});
+
+		// Reset the gap after capturing
+		previewGrid.style.gap = '10px';
 
 		const link = document.createElement('a');
 		link.download = '3x3_anime.png';
@@ -152,13 +158,16 @@
 	.preview-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 10px;
+		grid-template-rows: repeat(3, 1fr);
+		gap: 10px; /* Adjusted to ensure proper spacing between images */
 		margin-bottom: 20px;
+		width: 900px;
+		height: 900px;
 	}
 
 	.preview-grid img {
 		width: 100%;
-		height: 100%; /* Adjusted height */
+		height: 100%;
 		object-fit: cover;
 		border-radius: 5px;
 	}
@@ -254,7 +263,7 @@
 	.card {
 		flex: 0 0 auto;
 		margin-right: 20px;
-		width: autow;
+		width: auto;
 		max-width: 300px;
 		cursor: pointer;
 	}
@@ -284,20 +293,22 @@
 		.preview-content {
 			padding: 10px;
 			max-width: 90vw;
-			max-height: 80vh;
+			max-height: 100vh;
 		}
 
-		.preview-grid img {
-			height: 100%; /* Slightly increased for better visibility on smaller screens */
+		.preview-grid {
+			width: 300px;
+			height: 300px;
 		}
 
 		.selected-container {
-			max-height: 30vh;
+			max-height: auto;
+			width: 80%;
 			padding: 5px;
 		}
 
 		.selected-card {
-			width: 80px;
+			width: 90px;
 			height: 120px;
 		}
 
@@ -309,6 +320,9 @@
 		.preview-btn,
 		.download-btn {
 			font-size: 14px;
+			align-self: center;
+			justify-self: unset;
+			justify-content: center;
 		}
 
 		.card__image {
@@ -318,12 +332,23 @@
 		.card {
 			max-width: 200px;
 		}
-	}
-	@media (max-width: 1080px) {
-		.preview-content {
-			padding: 10px;
-			max-width: 60vw;
-			max-height: 80vh;
+
+		@media (max-width: 1080px) {
+			.preview-content {
+				padding: 10px;
+				max-width: 100vw;
+				max-height: 90vh;
+			}
+
+			.preview-grid {
+				width: 600px;
+				height: 600px;
+			}
+
+			.preview-btn,
+			.download-btn {
+				font-size: 16px;
+			}
 		}
 	}
 </style>
