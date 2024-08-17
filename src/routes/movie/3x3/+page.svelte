@@ -55,8 +55,7 @@
 			return;
 		}
 
-		previewGrid.style.gap = '0px';
-
+		// Ensure images are fully loaded before capturing
 		const images = previewGrid.querySelectorAll('img');
 		await Promise.all(
 			Array.from(images).map(
@@ -68,27 +67,36 @@
 			)
 		);
 
-		const scale = 2;
+		// Set background color to avoid transparent areas
+		previewGrid.style.backgroundColor = '#000';
+		previewGrid.style.gap = '0px';
 
-		previewGrid.style.transform = `scale(${scale})`;
-		previewGrid.style.transformOrigin = 'top left';
+		// Add a slight delay before capturing
+		setTimeout(async () => {
+			const scale = 2;
 
-		const canvas = await html2canvas(previewGrid, {
-			useCORS: true,
-			width: previewGrid.offsetWidth * scale,
-			height: previewGrid.offsetHeight * scale,
-			scale: 1
-		});
+			previewGrid.style.transform = `scale(${scale})`;
+			previewGrid.style.transformOrigin = 'top left';
 
-		previewGrid.style.transform = 'scale(1)';
-		previewGrid.style.gap = '10px';
+			const canvas = await html2canvas(previewGrid, {
+				useCORS: true,
+				width: previewGrid.offsetWidth * scale,
+				height: previewGrid.offsetHeight * scale,
+				scale: 1,
+				backgroundColor: '#000' // Ensure background is not transparent
+			});
 
-		const link = document.createElement('a');
-		link.download = '3x3_movie.png';
-		link.href = canvas.toDataURL();
-		link.click();
+			previewGrid.style.transform = 'scale(1)';
+			previewGrid.style.gap = '10px';
+
+			const link = document.createElement('a');
+			link.download = '3x3_movie.png';
+			link.href = canvas.toDataURL();
+			link.click();
+		}, 100); // Delay of 100ms
 	};
 </script>
+
 
 <header>
 	<div class="logo">
