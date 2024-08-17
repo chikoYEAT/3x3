@@ -10,38 +10,38 @@
 <section class="hero">
 	<h1>Create Your Movie 3x3</h1>
 	<p>Showcase your top 9 movie with our easy-to-use generator.</p>
-	<button><a href="/3x3">Create Now</a></button>
+	<button><a href="/movie/3x3">Create Now</a></button>
 </section>
 
 <section class="preview-grid">
 	<h2 style="color: white;">Example 3x3 Grid</h2>
 	<div class="grid-container">
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/13/17405.jpg" alt="Anime 1" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/mobile/thumbnail/xlarge/deadpool-and-wolverine-et00341295-1718018322.jpg" alt="Movie 1" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/3/87919.jpg" alt="Anime 2" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/mobile/thumbnail/xlarge/it-ends-with-us-et00398533-1720009408.jpg" alt="Anime 2" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/11/39717.jpg" alt="Anime 3" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/mobile/thumbnail/xlarge/kalki-2898-ad-et00352941-1718275859.jpg" alt="Anime 3" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/1171/109222.jpg" alt="Anime 4" />
+		  <img src="https://assets-in.bmscdn.com/iedb/movies/images/extra/vertical_logo/mobile/thumbnail/xxlarge/interstellar-et00019066-19-02-2021-02-25-12.jpg" alt="Anime 4" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/1286/99889.jpg" alt="Anime 5" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/extra/vertical_logo/mobile/thumbnail/xxlarge/despicable-me-4-et00386901-1723182543.jpg" alt="Anime 5" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/10/47347.jpg" alt="Anime 6" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/extra/vertical_logo/mobile/thumbnail/xxlarge/spider-man-series-et00306968-30-03-2021-08-41-52.jpg" alt="Anime 6" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/11/7362.jpg" alt="Anime 7" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/mobile/thumbnail/xlarge/inside-out-2-et00384010-1705486755.jpg" alt="Anime 7" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/1075/131925.jpg" alt="Anime 8" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/extra/vertical_logo/mobile/thumbnail/xxlarge/the-shawshank-redemption-et00069227-1707458004.jpg" alt="Anime 8" />
 		</div>
 		<div class="grid-item">
-			<img src="https://cdn.myanimelist.net/images/anime/13/17405.jpg" alt="Anime 9" />
+			<img src="https://assets-in.bmscdn.com/iedb/movies/images/extra/vertical_logo/mobile/thumbnail/xxlarge/batman-begins-et00065696-17-03-2021-04-09-19.jpg" alt="Anime 9" />
 		</div>
 	</div>
 </section>

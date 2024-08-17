@@ -3,7 +3,6 @@
 	import html2canvas from 'html2canvas';
 	let query = '';
 	let searchResults = [];
-	let searchQueryUrl = '';
 	let selectedImages = [];
 	let showPreview = false;
 
@@ -15,24 +14,25 @@
 	});
 
 	const search = async () => {
-		const requestUrl = `https://api.jikan.moe/v4/anime?q=${query}&sfw`;
-		searchQueryUrl = 'fetching...';
-		const startTime = new Date().getTime();
+		if (query === '') {
+			alert('Please enter a movie name.');
+			return;
+		}
+
+		const requestUrl = `https://api.themoviedb.org/3/search/movie?api_key=15d2ea6d0dc1d476efbca3eba2b9bbfb&query=${encodeURIComponent(query)}`;
 		const response = await fetch(requestUrl);
 		const data = await response.json();
-		const timeTaken = new Date().getTime() - startTime;
-		searchQueryUrl = requestUrl;
-		searchResults = data.data.slice(0, 16); // Limit to 16 results
+		searchResults = data.results.slice(0, 16); // Limit to 16 results
 	};
 
 	const selectImage = (item) => {
-		if (selectedImages.length < 9 && !selectedImages.some((img) => img.mal_id === item.mal_id)) {
+		if (selectedImages.length < 9 && !selectedImages.some((img) => img.id === item.id)) {
 			selectedImages = [...selectedImages, item];
 		}
 	};
 
 	const removeImage = (item) => {
-		selectedImages = selectedImages.filter((img) => img.mal_id !== item.mal_id);
+		selectedImages = selectedImages.filter((img) => img.id !== item.id);
 	};
 
 	const togglePreview = () => {
@@ -49,14 +49,12 @@
 			return;
 		}
 
-		// Ensure the images are fully loaded before capturing
 		const previewGrid = document.querySelector('#preview-grid');
 		if (!previewGrid) {
 			alert('Preview grid not found.');
 			return;
 		}
 
-		// Temporarily remove the gap before capturing
 		previewGrid.style.gap = '0px';
 
 		const images = previewGrid.querySelectorAll('img');
@@ -70,28 +68,23 @@
 			)
 		);
 
-		// Set the scale for upscaling (e.g., 2x for double the resolution)
 		const scale = 2;
 
-		// Increase the size of the preview grid
 		previewGrid.style.transform = `scale(${scale})`;
 		previewGrid.style.transformOrigin = 'top left';
 
-		// Adjust the canvas size
 		const canvas = await html2canvas(previewGrid, {
 			useCORS: true,
 			width: previewGrid.offsetWidth * scale,
 			height: previewGrid.offsetHeight * scale,
-			scale: 1 // Scale is handled by CSS transform
+			scale: 1
 		});
 
-		// Reset the preview grid after capturing
 		previewGrid.style.transform = 'scale(1)';
 		previewGrid.style.gap = '10px';
 
-		// Create and download the image
 		const link = document.createElement('a');
-		link.download = '3x3_anime.png';
+		link.download = '3x3_movie.png';
 		link.href = canvas.toDataURL();
 		link.click();
 	};
@@ -109,14 +102,14 @@
 			class="text"
 			bind:value={query}
 			on:keydown={(event) => event.keyCode === 13 && search()}
-			placeholder="Search for anime..."
+			placeholder="Search for movie..."
 		/>
 	</section>
 
 	<div class="selected-container">
 		{#each selectedImages as item}
 			<div class="selected-card">
-				<img src={item.images.jpg.large_image_url} alt={item.title} />
+				<img src={`http://image.tmdb.org/t/p/w500/${item.poster_path}`} alt={item.title} />
 				<button class="remove-btn" on:click={() => removeImage(item)}>X</button>
 			</div>
 		{/each}
@@ -125,7 +118,7 @@
 		{#each searchResults as item}
 			<div class="card" on:click={() => selectImage(item)}>
 				<div class="card__image">
-					<img loading="lazy" src={item.images.jpg.large_image_url} alt={item.title} />
+					<img loading="lazy" src={`http://image.tmdb.org/t/p/w500/${item.poster_path}`} alt={item.title} />
 				</div>
 			</div>
 		{/each}
@@ -146,7 +139,7 @@
 			<div class="preview-content" on:click|stopPropagation>
 				<div class="preview-grid" id="preview-grid">
 					{#each selectedImages as item}
-						<img src={item.images.jpg.large_image_url} alt={item.title} />
+						<img src={`http://image.tmdb.org/t/p/w500/${item.poster_path}`} alt={item.title} />
 					{/each}
 				</div>
 				<button
@@ -161,6 +154,7 @@
 		<p>made with ❤️ by chiko</p>
 	</div>
 </div>
+
 
 <style>
 	:global(body, html) {

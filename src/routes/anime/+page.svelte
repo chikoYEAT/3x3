@@ -10,7 +10,7 @@
 <section class="hero">
 	<h1>Create Your Anime 3x3</h1>
 	<p>Showcase your top 9 anime with our easy-to-use generator.</p>
-	<button><a href="/3x3">Create Now</a></button>
+	<button><a href="/anime/3x3">Create Now</a></button>
 </section>
 
 <section class="preview-grid">
